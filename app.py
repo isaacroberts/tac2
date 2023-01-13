@@ -55,7 +55,7 @@ def connect():
 
 @app.route('/move', methods=['POST'])
 def move():
-    print('move request:',request)
+    # print('move request:',request)
 
     sxs = False
 
@@ -92,7 +92,7 @@ def move():
     if sxs:
         updates = game.set_move(lm, True)
 
-    print ('updates: ',updates)
+    # print ('updates: ',updates)
     return updates
     # return f"[{', '.join(updates)}]"
 
@@ -116,11 +116,11 @@ def yourturn():
     isP1 = request.form['p1']=='true'
     # print ('isP1:',isP1)
     resp= game.get_next_move(isP1)
-    print('response:', resp)
+    # print('response:', resp)
     return resp
 
 
 if __name__ == '__main__':
-    print('running');
+    # print('running');
     app.debug = False
     app.run() #go to http://localhost:5000/ to view the page.

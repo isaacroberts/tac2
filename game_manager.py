@@ -92,13 +92,13 @@ class Game:
     def set_move(self, move, isP1):
         responses = []
 
-        print('set: ', isP1)
+        # print('set: ', isP1)
 
         if move != self.last_update_move:
             lm=move
             player = P1 if isP1 else P2
             if (self.board[lm[0],lm[1],lm[2],lm[3]]==EMPTY):
-                print ('player:', player, 'isP1', isP1,'p1, p2:', P1, P2, 'phrase:', P1 if isP1 else P2, type(isP1))
+                # print ('player:', player, 'isP1', isP1,'p1, p2:', P1, P2, 'phrase:', P1 if isP1 else P2, type(isP1))
                 responses.append(['square', lm[0],lm[1],lm[2],lm[3], player])
                 self.board[lm[0],lm[1],lm[2],lm[3]]=player
 
@@ -159,7 +159,7 @@ class Game:
 
         ch = np.random.randint(chAmt)
 
-        print ('Moving', ixes[ch])
+        # print ('Moving', ixes[ch])
         move = ixes[ch]
         if len(move)==2:
             move = [hx, hy, move[0], move[1]]

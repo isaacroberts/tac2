@@ -43,7 +43,6 @@ def return_flutter_doc(name):
         for i in range(0, len(datalist) - 1):
             DIR_NAME += '/' + datalist[i]
 
-    print (DIR_NAME, '/', datalist[-1])
     return send_from_directory(DIR_NAME, datalist[-1])
 
 game = game_manager.Game()
@@ -123,5 +122,5 @@ def yourturn():
 
 if __name__ == '__main__':
     print('running');
-    app.debug = True
+    app.debug = False
     app.run() #go to http://localhost:5000/ to view the page.

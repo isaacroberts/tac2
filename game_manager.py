@@ -4,7 +4,7 @@ from scipy.stats import norm
 class Angle():
     def __init__(self):
         #Unicode strings to display which angle
-        # self.strings=np.array(["\u22a6","|","\u2ade","\u2adf","–","\u2ae0","\\","/"])
+        self.strings=np.array(["\u22a6","|","\u2ade","\u2adf","–","\u2ae0","\\","/"])
 
         # Angle_amt * 3 spots * (x,y)
         self.poses=np.zeros(shape=(8,3,2),dtype=int)
@@ -72,16 +72,13 @@ class Game:
         #self.board_lines[:,:,:,self.LINES_ACTIVE]=  1
         #self.board_lines[:,:,:,self.LINES_PLAYER]= -1
 
-        """
+
         #Square values
         self.values=np.zeros(shape=(3,3,3,3,2))
         #Highest value - ie max convolution of values
         self.highest=np.zeros(shape=(3,3,2))
         #Values of squares
         self.hash_values=np.zeros(shape=(3,3,2))
-        """
-
-
         #Array of ints for each square
         self.board=np.full(shape=(3,3,3,3),fill_value=EMPTY,dtype=int)
         #Array of states for each square

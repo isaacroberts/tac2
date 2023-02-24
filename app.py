@@ -121,7 +121,12 @@ def reset():
 
 @app.route('/yourturn', methods=['GET', 'POST'])
 def yourturn():
-    return syncer.yourturn(get_id(request), request.form['p1']=='true')
+    # print(request.form);
+    isP1 = request.form['p1']=='true'
+    # print ('isP1:',isP1)
+    resp= game.get_next_move(isP1)
+    print('response:', resp)
+    return resp
 
 
 @app.route('/modcmd/<cmd>', methods=['GET', 'POST'])
@@ -134,5 +139,6 @@ def static_cmd(cmd):
     return syncer.nochange_cmd(get_id(request), cmd, request)
 
 if __name__ == '__main__':
-    app.debug = True
+    print('running');
+    app.debug = False
     app.run() #go to http://localhost:5000/ to view the page.

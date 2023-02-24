@@ -8,8 +8,7 @@ from flask_cors import CORS
 
 
 import os
-import game_manager
-
+import sync_manager
 
 
 # template_dir = os.path.abspath('./web/')
@@ -20,6 +19,8 @@ CORS(app, resources={r"*": {"origins": "*"}})
 
 
 FLUTTER_WEB_APP = 'templates'
+
+syncer = sync_manager.Syncer()
 
 
 @app.route('/')
@@ -47,16 +48,29 @@ def return_flutter_doc(name):
 
 game = game_manager.Game()
 
+def get_id(request):
+    if request.method=='GET':
+        return 1
+    elif request.method=='POST':
+        try:
+            return request.form['id']
+        except:
+            return 2
+    return 1
+
 
 @app.route('/connect', methods=[ 'GET', 'POST'])
 def connect():
-    return game.get_full_update()
+    return syncer.connect(get_id(request))
+
+@app.route('/getupdate', methods=[ 'GET', 'POST'])
+def getupdate():
+    return syncer.get_full_update(get_id(request))
 
 
 @app.route('/move', methods=['POST'])
 def move():
     # print('move request:',request)
-
     sxs = False
 
     updates = ['rejected', 'unknown error']
@@ -64,14 +78,11 @@ def move():
     try:
         if request.method=='GET':
             bx = request.args.get('bx')
-            bx = request.args.get('bx')
-            bx = request.args.get('bx')
-            bx = request.args.get('bx')
+            by = request.args.get('by')
+            sx = request.args.get('sx')
+            sy = request.args.get('sy')
             sxs = True
-
         elif request.method=='POST':
-            print('post')
-            print ('form :' , request.form)
             bx = request.form['bx']
             by = request.form['by']
             sx = request.form['sx']
@@ -79,7 +90,7 @@ def move():
             sxs = True
 
     except:
-        print('except')
+        # print('except')
         updates = ['rejected', 'parameters invalid']
 
     if sxs:
@@ -90,37 +101,38 @@ def move():
             sxs = False
 
     if sxs:
-        updates = game.set_move(lm, True)
+        return syncer.move(get_id(request), [bx,by,sx, sy])
 
-    # print ('updates: ',updates)
     return updates
-    # return f"[{', '.join(updates)}]"
 
+
+
+
+
+@app.route('/poll', methods=['GET', 'POST'])
+def poll():
+    return syncer.poll(get_id(request))
 
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
-    global game
-    game = game_manager.Game()
-    return 'confirmed'
-
-
-@app.route('/win', methods=['GET', 'POST'])
-def win():
-    return game.win()
+    return syncer.reset(get_id(request))
 
 
 @app.route('/yourturn', methods=['GET', 'POST'])
 def yourturn():
-    # print(request.form);
-    isP1 = request.form['p1']=='true'
-    # print ('isP1:',isP1)
-    resp= game.get_next_move(isP1)
-    # print('response:', resp)
-    return resp
+    return syncer.yourturn(get_id(request), request.form['p1']=='true')
 
+
+@app.route('/modcmd/<cmd>', methods=['GET', 'POST'])
+def changing_cmd(cmd):
+    return syncer.changing_cmd(get_id(request), cmd, request)
+    # return game.win()
+
+@app.route('/staticcmd/<cmd>', methods=['GET', 'POST'])
+def static_cmd(cmd):
+    return syncer.nochange_cmd(get_id(request), cmd, request)
 
 if __name__ == '__main__':
-    # print('running');
-    app.debug = False
+    app.debug = True
     app.run() #go to http://localhost:5000/ to view the page.

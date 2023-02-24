@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ../..
-flutter clean && flutter build web --release --base-href=/web/
+flutter build web --release --base-href=/web/
 
 rm -r flask/tac2/templates
 
@@ -15,3 +15,8 @@ git add .
 git commit -m $1
 
 git push 
+
+source ~/.bash_profile
+n
+
+heroku logs --tail -a tac2
